@@ -1,16 +1,8 @@
-# MiniMaxTinyModelGenerator
+# MiniMaxM2TinyModelGenerator
 
 ## 项目简介
 
-MiniMaxTinyModelGenerator 是一个用于生成 MiniMax 模型微型版本的工具。该工具基于 MiniMaxAI/MiniMax-M1-80k 原始模型，通过大幅缩减模型参数来创建一个轻量级的随机初始化版本，主要用于开发测试、模型架构验证等场景。
-
-## 功能特性
-
-- 🔧 **自动配置缩减**：自动从原始 MiniMax 模型中获取配置并进行参数缩减
-- 🎲 **随机权重初始化**：使用正态分布随机初始化所有模型权重
-- 💾 **完整模型保存**：生成包含配置文件、分词器和模型权重的完整模型包
-- ⚡ **混合专家架构**：保持原始模型的 MoE（Mixture of Experts）架构特性
-- 🛡️ **稳定初始化**：在 CPU 上进行初始化以确保跨机器的一致性
+MiniMaxM2TinyModelGenerator 是一个用于生成 MiniMax 模型微型版本的工具。该工具基于 MiniMaxAI/MiniMax-M2 原始模型，通过大幅缩减模型参数来创建一个轻量级的随机初始化版本，主要用于开发测试、模型架构验证等场景。
 
 ## 模型参数对比
 
@@ -29,7 +21,7 @@ MiniMaxTinyModelGenerator 是一个用于生成 MiniMax 模型微型版本的工
 ## 环境要求
 
 ```bash
-pip install torch transformers accelerate huggingface-hub
+uv sync
 ```
 
 ## 使用方法
@@ -39,15 +31,15 @@ pip install torch transformers accelerate huggingface-hub
 直接运行脚本生成微型模型：
 
 ```bash
-python generator.py
+uv run generator.py
 ```
 
 ### 输出说明
 
-运行后会在 `./minimax-m1-tiny-random` 目录下生成以下文件：
+运行后会在 `./minimax-m2-tiny-random` 目录下生成以下文件：
 
 ```
-minimax-m1-tiny-random/
+minimax-m2-tiny-random/
 ├── config.json              # 模型配置文件
 ├── model.safetensors         # 模型权重文件
 ├── tokenizer.json           # 分词器配置

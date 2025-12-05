@@ -13,8 +13,8 @@ from transformers import (
     set_seed,
 )
 
-source_model_id = "MiniMaxAI/MiniMax-M1-80k"
-save_folder = "./minimax-m1-tiny-random"
+source_model_id = "MiniMaxAI/MiniMax-M2"
+save_folder = "./minimax-m2-tiny-random"
 
 processor = AutoTokenizer.from_pretrained(source_model_id)
 processor.save_pretrained(save_folder)
