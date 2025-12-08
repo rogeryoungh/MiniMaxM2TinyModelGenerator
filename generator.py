@@ -46,7 +46,7 @@ config = AutoConfig.from_pretrained(
 print(config)
 automap = config_json['auto_map']
 torch.set_default_dtype(torch.bfloat16)
-model = AutoModelForCausalLM.from_config(config, trust_remote_code=True)
+model = AutoModelForCausalLM.from_config(config)
 torch.set_default_dtype(torch.float32)
 # according to source model, gat is in FP32
 for i in range(config.num_hidden_layers):
