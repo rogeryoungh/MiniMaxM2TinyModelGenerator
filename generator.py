@@ -72,33 +72,44 @@ def init_random_tiny_model(save_dir: Path):
     print("Stage 1 model saved to:", save_dir)
 
 
-def reload_with_quant_and_resave(save_dir_tmp: Path, save_dir: Path):
+def reload_with_quant_and_resave(save_dir_tmp: Path, save_dir: Path, device: str = "cuda"):
     print("=" * 100)
     print("Stage 2: reload with quant and resave")
 
     model = AutoModelForCausalLM.from_pretrained(
         save_dir_tmp,
         trust_remote_code=True,
+        device_map=device,
     )
 
     model.save_pretrained(save_dir)
     print("Stage 2 model saved to:", save_dir)
 
 
-def test_loaded_model(save_dir: Path):
+def test_loaded_model(save_dir: Path, device: str = "cuda"):
     print("=" * 100)
-    print("Testing loaded model")
+    print("Stage 3: Testing loaded model")
     model = AutoModelForCausalLM.from_pretrained(
         save_dir,
         trust_remote_code=True,
+        device_map=device,
     )
-    print(model)
+    tokenizer = AutoTokenizer.from_pretrained(save_dir)
+
+    messages = [
+        {"role": "user", "content": "Hello, how are you?"}
+    ]
+    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt", add_generation_prompt=True).to(device)
+    outputs = model.generate(inputs.input_ids, max_new_tokens=100)
+    response = tokenizer.decode(outputs)
+    print(response)
 
 
 if __name__ == "__main__":
+    SAVE_FOLDER_TMP.mkdir(parents=True, exist_ok=True)
     SAVE_FOLDER.mkdir(parents=True, exist_ok=True)
-    prepare_tokenizer_and_generation_config(MODEL_ID, SAVE_FOLDER_TMP)
     build_tiny_config(MODEL_ID, SAVE_FOLDER_TMP)
     init_random_tiny_model(SAVE_FOLDER_TMP)
+    prepare_tokenizer_and_generation_config(MODEL_ID, SAVE_FOLDER)
     reload_with_quant_and_resave(SAVE_FOLDER_TMP, SAVE_FOLDER)
     test_loaded_model(SAVE_FOLDER)
